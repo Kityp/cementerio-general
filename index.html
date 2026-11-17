@@ -3,825 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cementerio General — Recorrido Nocturno Inmersivo</title>
-  <link rel="preconnect" href="https://googleapis.com">
-  <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Cementerio General — Recorrido Nocturno</title>
+  <link href="https://googleapis.com" rel="stylesheet">
   <style>
-    :root {
-      --bg-dark: #07080c;
-      --bg-card: #10131c;
-      --bg-card-hover: #161a26;
-      --text-main: #f3f4f6;
-      --text-silver: #9ca3af;
-      --accent-silver: #d1d5db;
-      --accent-glow: rgba(209, 213, 219, 0.3);
-      --border-subtle: rgba(255, 255, 255, 0.1);
-    }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-    h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 0.04em; }
+    body { background: #07080c; color: #f3f4f6; font-family: 'Inter', sans-serif; line-height: 1.6; }
+    h1, h2, h3 { font-family: 'Cinzel', serif; }
 
+    /* 1. PORTADA */
     .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem 1.5rem;
-      background-image:
-        linear-gradient(to bottom, rgba(7, 8, 12, 0.45) 0%, rgba(7, 8, 12, 0.85) 78%, var(--bg-dark) 100%),
-        url('fondo-cementerio.jpg'),
-        radial-gradient(circle at 50% 20%, rgba(190, 205, 225, 0.22) 0%, rgba(25, 32, 48, 0.35) 35%, #07080c 75%);
-      background-size: cover;
-      background-position: center;
-      overflow: hidden;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 2rem;
+      background: linear-gradient(to bottom, rgba(7,8,12,0.5), #07080c), url('fondo-cementerio.jpg') center/cover, radial-gradient(circle at 50% 25%, #23293a, #07080c);
     }
+    .hero h1 { font-size: clamp(1.8rem, 4.5vw, 3.2rem); max-width: 850px; margin-bottom: 2rem; text-shadow: 0 4px 20px #000; }
+    .btn { display: inline-block; padding: 1rem 2rem; border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; border-radius: 4px; transition: 0.3s; }
+    .btn:hover { background: #fff; color: #07080c; }
 
-    .fog-layer {
-      position: absolute;
-      bottom: 0;
-      left: -50%;
-      width: 200%;
-      height: 40%;
-      background: radial-gradient(ellipse at center, rgba(200, 210, 225, 0.09) 0%, transparent 70%);
-      animation: fogMove 16s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-    @keyframes fogMove {
-      0% { transform: translateX(-8%); }
-      100% { transform: translateX(8%); }
-    }
+    /* SECCIONES */
+    .container { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem; }
+    .intro { background: #10131c; border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 800px; margin: 0 auto; color: #d1d5db; font-size: 1.15rem; }
+    .sec-title { text-align: center; font-size: 2rem; margin-bottom: 2.5rem; }
 
-    .hero-badge {
-      position: relative;
-      z-index: 2;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.28em;
-      color: var(--accent-silver);
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-subtle);
-      padding: 0.45rem 1.2rem;
-      border-radius: 999px;
-      background: rgba(16, 19, 28, 0.65);
-      backdrop-filter: blur(6px);
-    }
+    /* 11 HITOS */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; align-items: start; }
+    .card { background: #10131c; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; }
+    .card small { color: #9ca3af; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+    .card h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
+    .meta { font-size: 0.82rem; color: #9ca3af; margin-bottom: 1rem; }
+    audio { width: 100%; height: 38px; margin-bottom: 0.8rem; filter: invert(0.9); }
+    .toggle { width: 100%; padding: 0.6rem; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #d1d5db; border-radius: 6px; cursor: pointer; }
+    .toggle:hover { border-color: #fff; color: #fff; }
+    .text-box { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; color: #d1d5db; white-space: pre-line; max-height: 300px; overflow-y: auto; }
+    .text-box.open { display: block; }
 
-    .hero h1 {
-      position: relative;
-      z-index: 2;
-      font-size: clamp(1.85rem, 4.6vw, 3.5rem);
-      font-weight: 700;
-      color: #ffffff;
-      max-width: 920px;
-      line-height: 1.25;
-      margin-bottom: 2.4rem;
-      text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
-    }
+    /* MAPA */
+    .map-box { background: #10131c; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; text-align: center; }
+    .map-box img { max-width: 100%; max-height: 550px; border-radius: 8px; cursor: zoom-in; }
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; justify-content: center; align-items: center; padding: 1rem; }
+    .modal.active { display: flex; }
+    .modal img { max-width: 95%; max-height: 90vh; }
+    .close-btn { position: fixed; top: 1rem; right: 1.5rem; background: #fff; color: #000; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-    .btn-start {
-      position: relative;
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1rem 2.3rem;
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 4px;
-      text-decoration: none;
-      backdrop-filter: blur(8px);
-      transition: all 0.35s ease;
-    }
-    .btn-start:hover {
-      background: #ffffff;
-      color: var(--bg-dark);
-      box-shadow: 0 0 28px var(--accent-glow);
-      transform: translateY(-2px);
-    }
+    /* ENCUESTA CON CARITAS */
+    .survey { background: #10131c; border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem 1.5rem; border-radius: 12px; max-width: 600px; margin: 0 auto; text-align: center; }
+    .faces { display: flex; justify-content: center; gap: 0.8rem; margin: 1.5rem 0; }
+    .face { width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); font-size: 1.7rem; cursor: pointer; opacity: 0.55; transition: 0.25s; }
+    .face:hover { opacity: 1; transform: scale(1.1); }
+    .face.active { opacity: 1; transform: scale(1.18); border-color: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+    textarea { width: 100%; height: 100px; background: #07080c; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; font-family: inherit; }
+    .submit-btn { width: 100%; padding: 0.9rem; background: #fff; color: #07080c; border: none; border-radius: 6px; font-weight: bold; text-transform: uppercase; cursor: pointer; }
+  </style>
+</head>
+<body>
 
-    .intro-section { padding: 5rem 1.5rem 3rem; max-width: 840px; margin: 0 auto; text-align: center; }
-    .intro-box {
-      background: linear-gradient(145deg, #121520, #0b0d14);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 2.6rem 2rem;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
-    }
-    .intro-box::before { content: "✦"; display: block; font-size: 1.4rem; color: var(--text-silver); margin-bottom: 1rem; }
-    .intro-box p { font-size: clamp(1.05rem, 2vw, 1.22rem); color: var(--accent-silver); font-weight: 300; }
+  <header class="hero">
+    <h1>¿Te atreves a vivir esta experiencia inmersiva autoguiada?</h1>
+    <a href="#hitos" class="btn">Comenzar recorrido ↓</a>
+  </header>
 
-    .hitos-section { padding: 3rem 1.5rem 5rem; max-width: 1150px; margin: 0 auto; }
-    .section-header { text-align: center; margin-bottom: 3rem; }
-    .section-header h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); color: #ffffff; margin-bottom: 0.5rem; }
-    .section-header p { color: var(--text-silver); font-size: 0.95rem; }
-    .hitos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem; align-items: start; }
-    .hito-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 1.75rem;
-      transition: border-color 0.3s ease, background-color 0.3s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-    .hito-card:hover { border-color: rgba(209, 213, 219, 0.3); background-color: var(--bg-card-hover); }
-    .hito-number { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-silver); display: block; margin-bottom: 0.4rem; }
-    .hito-card h3 { font-size: 1.2rem; color: #ffffff; margin-bottom: 0.5rem; line-height: 1.35; }
-    .hito-meta { font-size: 0.82rem; color: var(--text-silver); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
+  <section class="container">
+    <div class="intro">
+      En esta experiencia podrás escuchar historias que jamás fueron contadas en este cementerio y podrás encontrar 11 diferentes hitos que mezclan historia, terror y simbología. ¡Aquí podrás encontrar todos los audios!
+    </div>
+  </section>
 
-    .custom-player {
-      background: rgba(7, 8, 12, 0.75);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      padding: 0.85rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      margin-bottom: 1rem;
-    }
-    .play-btn {
-      width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.35);
-      background: rgba(255, 255, 255, 0.08); color: #ffffff; cursor: pointer; display: flex;
-      align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem; transition: all 0.25s ease;
-    }
-    .play-btn:hover { background: #ffffff; color: var(--bg-dark); }
-    .progress-wrap { flex: 1; display: flex; flex-direction: column; gap: 0.35rem; }
-    .progress-bar { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255, 255, 255, 0.18); border-radius: 4px; outline: none; cursor: pointer; }
-    .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #ffffff; cursor: pointer; }
-    .time-display { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-silver); font-variant-numeric: tabular-nums; }
+  <section id="hitos" class="container">
+    <h2 class="sec-title">Los 11 Hitos del Recorrido</h2>
+    <div class="grid" id="grid"></div>
+  </section>
 
-    .transcript-toggle {
-      width: 100%; background: transparent; border: 1px solid var(--border-subtle); color: var(--accent-silver);
-      padding: 0.65rem 1rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center; transition: all 0.25s ease;
-    }
-    .transcript-toggle:hover { border-color: rgba(255, 255, 255, 0.35); color: #ffffff; }
-    .transcript-content {
-      display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);
-      font-size: 0.9rem; color: #d1d5db; max-height: 360px; overflow-y: auto; padding-right: 0.5rem; white-space: pre-line;
-    }
-    .transcript-content.open { display: block; }
+  <section id="mapa" class="container">
+    <h2 class="sec-title">Mapa del Recorrido</h2>
+    <div class="map-box">
+      <img src="mapa-cementerio.jpg" alt="Toca para ampliar el mapa" onclick="document.getElementById('modal').classList.add('active')">
+      <p style="margin-top:0.8rem; color:#9ca3af; font-size:0.85rem;">Toca el mapa para ampliarlo en pantalla completa</p>
+    </div>
+  </section>
 
-    .map-section { padding: 4rem 1.5rem; max-width: 1000px; margin: 0 auto; }
-    .map-container { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); }
-    .map-frame { overflow: hidden; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.12); cursor: zoom-in; background: #0b0d14; min-height: 220px; display: flex; align-items: center; justify-content: center; }
-    .map-frame img { width: 100%; max-height: 620px; object-fit: contain; display: block; }
-    .map-controls { margin-top: 1.25rem; }
-    .btn-map { background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.25); padding: 0.7rem 1.5rem; border-radius: 6px; font-size: 0.88rem; cursor: pointer; }
-    .btn-map:hover { background: #ffffff; color: var(--bg-dark); }
+  <div class="modal" id="modal" onclick="this.classList.remove('active')">
+    <button class="close-btn">Cerrar ✕</button>
+    <img src="mapa-cementerio.jpg" alt="Mapa ampliado">
+  </div>
 
-    .map-modal { display: none; position: fixed; inset: 0; background: rgba(5, 6, 9, 0.96); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
-    .map-modal.active { display: flex; }
-    .modal-toolbar { position: fixed; top: 1rem; right: 1rem; display: flex; gap: 0.6rem; z-index: 10000; }
-    .modal-btn { background: #1f2433; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 0.55rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
-    .modal-scroll-area { width: 100%; height: 100%; overflow: auto; display: flex; justify-content: center; align-items: center; }
-    .modal-scroll-area img { max-width: 95%; max-height: 90vh; transition: transform 0.25s ease; }
+  <section id="encuesta" class="container">
+    <div class="survey">
+      <h2>¿Cómo fue tu experiencia?</h2>
+      <div class="faces">
+        <button type="button" class="face" onclick="selectFace(this)">😠</button>
+        <button type="button" class="face" onclick="selectFace(this)">😢</button>
+        <button type="button" class="face" onclick="selectFace(this)">😐</button>
+        <button type="button" class="face" onclick="selectFace(this)">🙂</button>
+        <button type="button" class="face" onclick="selectFace(this)">😁</button>
+      </div>
+      <textarea id="comment" placeholder="Deja aquí tu comentario sobre el recorrido..."></textarea>
+      <button class="submit-btn" onclick="sendSurvey()">Enviar valoración</button>
+      <p id="thanks" style="display:none; margin-top:1rem; color:#d1d5db;">¡Gracias por compartir tu experiencia!</p>
+    </div>
+  </section>
 
-    /* ENCUESTA CON CARITAS CON BRILLO */
-    .survey-section { padding: 4rem 1.5rem 6rem; max-width: 680px; margin: 0 auto; }
-    .survey-card { background: linear-gradient(160deg, #131622, #0b0d14); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 2.5rem 2rem; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6); }
-    .survey-card h2 { font-size: 1.65rem; color: #ffffff; margin-bottom: 0.5rem; }
-    .survey-card p { color: var(--text-silver); font-size: 0.92rem; margin-bottom: 1.75rem; }
-    .rating-faces { display: flex; justify-content: center; gap: 0.9rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
-    .face-btn {
-      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 50%;
-      width: 56px; height: 56px; font-size: 1.85rem; cursor: pointer; display: flex;
-      align-items: center; justify-content: center; opacity: 0.55; transition: all 0.25s ease;
-    }
   <script>
-    const hitosData = [
-      {
-        num: "Hito 01",
-        titulo: "El principio",
-        ubicacion: "Tumba de Manuel Joaquín Valdivieso",
-        duracion: "4:00",
-        audio: "audios/hito-1.mp3",
-        texto: `Voz narradora: Masculina adulta, tono cercano, reflexivo, emotivo e histórico.
-
-(Sonido ambiente: viento suave. A lo lejos se escuchan ruedas de carretas avanzando sobre caminos de tierra.)
-
-Nuestra primera historia nos lleva al año 1821. En ese entonces, donde hoy se encuentra el Cementerio General solo había terrenos abiertos en las afueras de Santiago. Sin embargo, mientras la ciudad crecía y se expandía, los espacios destinados a sepultar a los fallecidos comenzaban a ser insuficientes.
-
-(Suenan levemente campanas de iglesia.)
-
-Durante años, los entierros se realizaron principalmente en iglesias, conventos y hospitales. Pero el aumento de la población hizo evidente la necesidad de crear un lugar destinado exclusivamente para dar sepultura y preservar la memoria de quienes partían.
-
-Fue en ese momento cuando Manuel Joaquín Valdivieso pasó a desempeñar un papel clave en esta historia…
-
-Fue uno de los principales impulsores de este proyecto. Como parte de la comisión encargada, trabajó para convertir aquella necesidad en una realidad y dar origen al primer cementerio público de Santiago.
-
-(Comienzan a escucharse herramientas de construcción y el paso de carretas.)
-
-Así comenzó un proyecto que, con el paso de los meses, transformó estos terrenos abiertos en un nuevo espacio para la ciudad, con eso poco a poco se levantaron los primeros muros, se trazaron los caminos y este lugar comenzó a tomar forma…
-
-Finalmente, el 9 de diciembre de 1821, el Director Supremo Bernardo O'Higgins inauguró oficialmente el Cementerio General.
-
-(Sonido de una gran puerta de hierro abriéndose.)
-
-Con su inauguración no solo nació uno de los cementerios más importantes de Chile. También comenzó una nueva etapa para Manuel Joaquín Valdivieso, quien asumió como el primer administrador del recinto y acompañó sus primeros años de funcionamiento…
-
-(El sonido ambiente vuelve a quedarse solo con el viento.)
-
-Hoy, más de dos siglos después, te encuentras frente a la tumba de uno de los hombres que hizo posible el origen de este lugar… Aunque muchas personas pasan junto a ella sin conocer su historia, su legado permanece en cada uno de los caminos que recorrerás a partir de ahora, recordándonos que toda gran historia tiene un comienzo... y esta fue la suya..`
-      },
-      {
-        num: "Hito 02",
-        titulo: "“Un sabor… curioso…”",
-        ubicacion: "Intersección calle Echaurren con Infante",
-        duracion: "3:00",
-        audio: "audios/hito-2.mp3",
-        texto: `Voz narradora: Una voz de una mujer joven, misteriosa
-
-(Se escuchan guitarras, palmas, risas, conversaciones y una cueca a lo lejos. El ambiente se mantiene durante unos segundos y luego la música disminuye lentamente, mientras las voces continúan de fondo.)
-
-¿Te recuerda algo este ambiente?
-
-Quizás una fonda... una fiesta... o una celebración…
-
-Puede parecer extraño, pero hace más de un siglo este lugar también se llenaba de vida… Cuando pensamos en un cementerio, imaginamos silencio, respeto y recogimiento.
-
-(El ambiente festivo desaparece y queda un suave sonido de viento.)
-
-Sin embargo, durante el siglo XIX, justo luego de la inauguración del cementerio, en fechas como el Día de Todos los Santos y el Día de los Difuntos, el Cementerio General recibía a miles de personas que llegaban para visitar a sus familiares, dejar flores y recordar a quienes ya no estaban. Muchas permanecían durante horas recorriendo sus calles y, como era de esperarse, donde había tantos visitantes también comenzaban a instalarse vendedores…
-
-(Se escuchan ruedas de carros de comida y vendedores ofreciendo sus productos.)
-
-Entre todos los alimentos que ofrecían, las empanadas eran una de las opciones más populares, ya que eran las más económicas y acompañaban a quienes pasaban gran parte del día en este lugar. Sin embargo, fue a partir de ese momento cuando comenzó a circular un rumor que, con el tiempo, terminaría convirtiéndose en una de las leyendas más conocidas del Cementerio General.
-
-Una frase empezó a repetirse entre los visitantes, casi siempre en voz baja:
-
-—"Dicen que algunas empanadas están hechas con carne de difunto..." (Susurrando)
-
-A partir de ese momento, el comentario comenzó a pasar de una persona a otra… Mientras algunos lo tomaban como una simple broma entre vendedores, otros preferían creer que había algo de verdad en la historia… Lo cierto es que nadie sabía quién había iniciado aquel rumor, y quizás por eso resultaba tan difícil dejar de pensar en él…
-
-Con el paso de los días, la duda fue creciendo, hasta que las empanadas dejaron de ser solo un alimento y comenzaron a generar desconfianza… porque bastaba escuchar aquella historia una sola vez para comenzar a mirarlas de otra manera…
-
-(Se escuchan suaves susurros).
-
-Los años pasaron, los vendedores cambiaron y las celebraciones también. Sin embargo, el rumor permaneció y terminó formando parte de la memoria del Cementerio General. Porque el tiempo puede borrar personas, fechas e incluso lugares, pero no siempre logra borrar las historias que alguna vez hicieron dudar a toda una comunidad.`
-      },
-      {
-        num: "Hito 03",
-        titulo: "Bernardo O’Higgins, el hombre que nunca dejó de regresar",
-        ubicacion: "Sector vinculado a Bernardo O’Higgins",
-        duracion: "4:00",
-        audio: "audios/hito-3.mp3",
-        texto: `Voz narradora: Masculina adulta, voz grave, cálida y reflexiva.
-
-(Sonido ambiente: viento suave entre los árboles, pájaros y pasos sobre gravilla.)
-
-Bernardo O’Higgins murió en 1842 en Lima, Perú, lejos del país que había ayudado a independizar. Durante casi treinta años, sus restos permanecieron allí, mientras en Chile su nombre seguía formando parte de la historia de la naciente República.
-
-(Se escuchan campanas a lo lejos y el sonido de un barco sobre el mar, representando el viaje de regreso.)
-
-En 1869, el gobierno decidió repatriar sus restos. Su regreso simbolizó el reconocimiento de uno de los principales protagonistas de la independencia y de su aporte a la construcción del país.
-
-Pero la relación entre Bernardo O’Higgins y el Cementerio General había comenzado mucho antes.
-
-(Transición sonora: páginas antiguas pasando, una pluma escribiendo y murmullos de una reunión.)
-
-A comienzos del siglo XIX, Santiago enfrentaba un problema sanitario. Los entierros se realizaban en iglesias y conventos, por lo que era necesario crear un espacio destinado exclusivamente a las sepulturas.
-
-En 1821, siendo Director Supremo, Bernardo O’Higgins entregó el respaldo político para hacer realidad este proyecto. La organización estuvo a cargo de distintas autoridades, entre ellas Manuel Joaquín Valdivieso, quien tuvo un papel clave en el desarrollo de la obra.
-
-(Sonido de herramientas de construcción de la época: palas cavando tierra, golpes suaves de martillo y una carreta de madera pasando lentamente.)
-
-Así nació el Cementerio General, un lugar pensado para responder a las necesidades de una ciudad en crecimiento y que, con el tiempo, se transformaría en uno de los espacios patrimoniales más importantes de Chile.
-
-(Regresan el viento y los pasos sobre hojas secas.)
-
-Décadas después ocurrió una coincidencia histórica. En 1869, los restos de Bernardo O’Higgins llegaron a este mismo cementerio y fueron sepultados en el Patio Gótico.
-
-Durante años, miles de personas visitaron ese lugar para rendir homenaje a quien había contribuido a la independencia del país.
-
-(Suena una marcha solemne muy lejana y luego se desvanece.)
-
-Sin embargo, ese no sería su descanso definitivo. En 1979 sus restos fueron trasladados al Altar de la Patria, frente al Palacio de La Moneda.
-
-(Se escuchan pasos firmes de una guardia de honor y un redoble suave de tambor.)
-
-Años más tarde, en 2006, fueron trasladados nuevamente a la Cripta del Libertador, bajo la Plaza de la Ciudadanía, donde permanecen hasta hoy.
-
-(Viento entre los cipreses y hojas moviéndose.)
-
-Cada uno de estos traslados refleja cómo la memoria de Bernardo O’Higgins ha cambiado con el paso del tiempo. Más allá del lugar donde descansan sus restos, su historia continúa formando parte de la identidad de Chile.
-
-Hoy, mientras recorres el Cementerio General, puedes descubrir que este espacio no solo conserva tumbas y monumentos. También resguarda las historias de quienes ayudaron a construir el país y mantiene viva la memoria de generaciones enteras.
-
-(Sonido final: pasos alejándose sobre gravilla, viento entre los árboles y campanas lejanas. El ambiente se desvanece lentamente.)`
-      },
-      {
-        num: "Hito 04",
-        titulo: "“La Mulan”",
-        ubicacion: "Mausoleo Cuerpo de Inválidos - Veteranos del 79",
-        duracion: "4:00",
-        audio: "audios/hito-4.mp3",
-        texto: `Voz narradora: Femenina adulta reflexiva
-
-(Sonido ambiente: viento suave entre los árboles, hojas moviéndose y un leve canto de pájaros.)
-
-Hace unos momentos conocimos la historia de Bernardo O'Higgins, uno de los hombres que ayudó a construir el Chile independiente.
-
-Décadas después, cuando ese mismo país volvió a enfrentarse a una guerra, otra persona demostraría que el verdadero valor no dependía del rango, la riqueza... ni siquiera del género.
-
-Su nombre era Irene Morales.
-
-(campanas de iglesia a lo lejos, voces de un barrio popular y pasos sobre tierra.)
-
-Nació en Santiago en 1865, en el seno de una familia humilde. Desde muy pequeña aprendió a coser, remendar y confeccionar ropa, un oficio con el que logró ganarse la vida durante muchos años.
-
-Con apenas diecisiete años creyó haber encontrado la felicidad al casarse. Sin embargo, ese nuevo comienzo duró muy poco. Su primer esposo falleció poco tiempo después, dejándola viuda cuando apenas comenzaba su vida adulta.
-
-(Silencio breve. Comienza una lluvia suave.)
-
-      {
-        num: "Hito 07",
-        titulo: "“Una flor para otra flor”",
-        ubicacion: "Calle Romero con Dávila",
-        duracion: "3:00",
-        audio: "audios/hito-7.mp3",
-        texto: `Voz narradora: Mujer joven. Tono: Misterioso, melancólico, cercano y envolvente.
-
-(Sonido ambiente: viento suave recorriendo los senderos del cementerio. Volumen bajo.)
-
-Continúa caminando lentamente y observa los bancos de piedra a los lados del camino, rodeados de mausoleos antiguos
-
-Según la leyenda si tienes suerte…O quizás mala suerte…Podrías verla.
-
-(Se incorpora música instrumental suave con piano y cuerdas. Volumen bajo.)
-
-Quienes se han cruzado con ella describen a una mujer joven con una extraordinaria belleza, vestida con ropa elegante de otra época.
-
-(sonido de música antigua)
-
-Mientras la neblina cubre los senderos, ella permanece inmovi en un banco esperando a alguien que jamás llegó.
-
-(Sonido de viento suave entre árboles.)
-
-Hace algunos años, una estudiante de historia recorría estos mismos pasillos…cuando la vio… Sola y sonriente.
-
-Creyendo que era una visitante más, se acercó a conversar
-
-(Sonido de pasos lentos sobre la tierra)
-
-La joven la saludó…Y para su sorpresa, la misteriosa mujer respondió con una amabilidad que resultaba casi imposible de describir.
-
-Pronto comenzaron a conversar. (sonidos de conversación)
-
-Hablar de los monumentos y de los secretos del cementerio , pero hubo algo que le llamó la atención a la estudiante…
-
-La extraña visitante le habló con una profunda melancolía sobre las despedidas y las almas que se quedan atadas a este mundo por dejar algo pendiente.
-
-(Suave música de piano continúa.)
-
-Su voz era tan suave que parecía confundirse con el viento. (sonido de viento leve)
-
-Al momento de despedirse, la mujer extendió su mano y le entregó una pequeña flor blanca
-
-Con una sonrisa le susurro:
-
-(Voz femenina suave y lejana.)
-
-“Si encuentras dónde pertenece… déjala allí por mí.”
-
-(sonidos de pasos alejándose levemente)
-
-Intrigada la estudiante guardó la flor y continuó su recorrido hasta llegar a una zona apartada y descuidada.
-
-(Sonido ambiente: viento más intenso.)
-
-Frente a ella apareció una tumba agrietada y abandonada.
-
-Movida por la curiosidad, limpia la superficie de la lápida.
-
-(Sonido suave de mano retirando polvo de piedra.)
-
-Su corazón se detuvo por un instante. (Sonido misterioso/ golpe de efecto)
-
-Temblando dejo la flor sobre la sepultura.
-
-En ese instante una rafaga de viento helado sacude las hojas
-
-(Sonido de una fuerte ráfaga de viento.)
-
-Y la niebla envolvió al lugar.
-
-Cuando la estudiante volteo hacia el banco, este estaba completamente vacio.
-
-(Sonido leve de piano melancólico)
-
-Los cuidadores aseguran que cada cierto tiempo, al amanecer, sobre esa tumba olvidada aparece la flor blanca completamente fresca, sin que nadie haya entrado al recinto.
-
-Observa los bancos que te rodean, si alguna vez percibes el aroma de flores frescas de la nada ves a una mujer observando el camino…..Piénsalo dos veces antes de acercarte.
-
-Porque en este cementerio, no todos los visitantes pertenecen al mundo de los vivos.
-
-(Permanece únicamente el sonido del viento durante unos segundos antes de finalizar el relato.)`
-      },
-      {
-        num: "Hito 08",
-        titulo: "“La bruja del gato negro”",
-        ubicacion: "Pabellón 1",
-        duracion: "4:00",
-        audio: "audios/hito-8.mp3",
-        texto: `Voz narradora: Mujer con voz delicada pero con aspecto misterioso
-
-(Sonido ambiente: viento suave entre estructuras de piedra y sonido de cementerio de noche)
-
-Entre las historias que se cuentan sobre el Cementerio General, hay una que los trabajadores más antiguos aún recuerdan, aunque pocos se atreven a mencionarla cuando cae la noche, y es la historia de una mujer que aparecía en este mismo sector, específicamente en los alrededores del Pabellón 1, una figura que nunca fue identificada ni registrada, pero cuya presencia comenzó a repetirse con el tiempo…
-
-Siempre de noche y siempre acompañada por un gato negro… Su aparición comenzó a relacionarse con hechos extraños que ocurrían en el lugar, como velas encendidas sin explicación, restos de cera en el suelo y símbolos que aparecían entre los pasillos y luego desaparecían sin dejar rastro.
-
-(Sonido leve de vela encendiéndose.)
-
-Con el tiempo, los trabajadores comenzaron a hablar de ella, ya que algunas noches se reportaba actividad dentro del pabellón, luces encendidas y movimientos que no tenían explicación clara, como si alguien realizará rituales en completo silencio…
-
-(Viento más intenso entre pasillos.)
-
-Una de esas noches, un guardia del recinto decidió recorrer el sector tras escuchar ruidos inusuales en el Pabellón 1, acompañado solo por su linterna y el silencio del lugar.
-
-Al acercarse, notó movimientos entre los pasillos y siguió el sonido hasta el interior del pabellón. Allí encontró una escena inquietante: una mujer arrodillada, vestida de estilo gotico, rodeada de velas encendidas, murmurando palabras que no lograban entenderse, mientras un gato negro permanecía frente a ella…
-
-(Silencio breve, murmullo bajo y velas ardiendo.)
-
-El guardia retrocedió para buscar refuerzos, pero cuando regresaron junto a otros trabajadores, el interior estaba completamente vacío… No había señales de la mujer, solo velas aún encendidas y un silencio absoluto.
-
-(El viento se vuelve más frío e intenso)
-
-Después de ese hecho, comenzaron a escucharse maullidos dentro del Pabellón 1 durante la noche, cada vez más frecuentes, como si algo siguiera moviéndose entre los pasillos sin poder descansar…
-
-También comenzaron a aparecer reportes de una figura femenina vestida de oscuro que caminaba por el sector, deteniéndose frente a las bóvedas y observando los rincones como si buscara algo perdido…
-
-(Sonido de pasos suaves sobre piedra.)
-
-Con el tiempo, la historia se formó en leyenda, y se decía que aquella mujer había intentado realizar un ritual que salió mal… en el que el gato que la acompañaba fue parte del sacrificio, quedando todo ligado a este lugar desde esa noche…
-
-Por eso, algunos aseguran que en las noches más silenciosas aún se pueden escuchar maullidos recorriendo el Pabellón 1, como si algo o alguien siguiera buscando entre sus pasillos, lo que nunca logró recuperar…
-
-(Maullido lejano que se pierde en el viento.)`
-      },
-      {
-        num: "Hito 09",
-        titulo: "“Si lo Sigues, No Regresas.”",
-        ubicacion: "Intersección Calle Cipreses con Ariarán",
-        duracion: "4:00",
-        audio: "audios/hito-9.mp3",
-        texto: `Voz narradora: voz masculina adulta. Tono grave, ronco suave, pausado.
-
-(Sonido ambiente: viento entre los árboles, hojas moviéndose y pasos sobre gravilla.)
-
-Cuando cae la noche, el Cementerio General cambia por completo. Los visitantes se marchan, los caminos quedan en silencio y solo el viento recorre los pasillos entre los mausoleos.
-
-Muchos creen que, cuando oscurece, el cementerio queda vacío. Pero quienes trabajan aquí desde hace años cuentan una historia diferente.
-
-(Se escuchan hojas secas arrastradas por el viento.)
-
-Dicen que existe una figura que aparece entre la neblina durante las noches más frías. Nadie sabe exactamente cuándo comenzó a verse. Algunos la describen como un hombre alto vestido de oscuro; otros aseguran que solo es una sombra con forma humana.
-
-Lo curioso es que casi nadie la ve primero.
-
-(Pasos lentos sobre gravilla húmeda, aún lejanos.)
-
-Antes de aparecer, siempre se escuchan unos pasos. Son lentos, constantes y parecen acercarse sin importar la dirección en que uno camine.
-
-Cuando finalmente la figura se distingue entre la neblina, permanece inmóvil por unos segundos. Después comienza a avanzar lentamente.
-
-(El viento aumenta levemente y luego vuelve a bajar.)
-
-Quienes dicen haberla visto coinciden en algo: nunca transmite miedo al principio. Al contrario, inspira tranquilidad.
-
-Se acerca con calma, inclina levemente la cabeza y pronuncia una sola frase.
-
-(Eco muy suave.)
-
-“Te acompaño hacia la salida.”
-
-Muchos sienten confianza al escuchar esas palabras. Creen haber encontrado a alguien que conoce el camino en medio de la oscuridad.
-
-Pero las historias cuentan otra cosa.
-
-(El viento se vuelve más intenso y se escucha una rama crujir.)
-
-Nadie sabe cuántas personas aseguran haber visto a esta figura. Algunos solo escucharon los pasos. Otros dicen haber sentido que alguien caminaba detrás de ellos, aunque al darse vuelta no encontraron a nadie. Lo único que todos recuerdan es la misma voz y la misma invitación.
-
-(Viento constante entre los cipreses.)
-
-Con el paso de los años comenzó a surgir una explicación. Algunos dicen que aquella figura fue un visitante que una noche se perdió entre los senderos del Cementerio General. Nadie volvió a verlo salir y nunca se supo qué ocurrió con él.
-
-Desde entonces, aseguran que continúa recorriendo estos caminos, buscando una salida que jamás encontró. Tal vez por eso se acerca a quienes caminan solos y les ofrece ayuda con la misma frase.
-
-(Pasos suaves sobre gravilla y un leve eco.)
-
-“Te acompaño hacia la salida.”
-
-Pero quienes conocen esta leyenda advierten que esa salida nunca conduce al exterior del cementerio. Dicen que quien decide seguirlo desaparece entre la neblina y jamás vuelve a recorrer estos senderos.
-
-En un lugar como este, donde descansan miles de historias, es difícil saber dónde termina la realidad y dónde comienza la leyenda. Quizás por eso este relato sigue vivo, pasando de generación en generación entre quienes conocen el Cementerio General.
-
-(El viento vuelve a escucharse entre los árboles.)
-
-Verdad o leyenda, nadie ha logrado demostrarlo. Sin embargo, quienes conocen el Cementerio General prefieren no caminar solos cuando cae la noche.
-
-Porque dicen que, si el viento deja de escucharse por un instante y comienzan a sonar unos pasos detrás de ti…
-
-(Los pasos se escuchan cada vez más cerca.)
-
-…lo peor que puedes hacer es responder cuando una voz te diga:
-
-(Susurro con un leve eco.)
-
-“Te acompaño hacia la salida.”
-
-(Sonido final: pasos alejándose sobre la gravilla, viento entre los árboles y silencio gradual.)`
-      },
-      {
-        num: "Hito 10",
-        titulo: "“El lenguaje… no se detiene.” (Una historia de Andrés Bello)",
-        ubicacion: "Tumba de Andrés Bello",
-        duracion: "4:30",
-        audio: "audios/hito-10.mp3",
-        texto: `Voz principal (narradora): femenina, adulta joven, suave, cálida y muy envolvente, tono íntimo, como si caminara junto al oyente.
-Voz secundaria (Andrés Bello): masculina, adulta mayor, grave, firme, fría y controlada, con una calma inquietante.
-Sonido ambiente: pasos lentos sobre grava y hojas crujientes. Viento suave entre árboles
-
-(SONIDO: pasos lentos sobre grava. Viento suave entre los árboles.)
-
-NARRADORA (voz suave, cercana):
-Continúa caminando...Sin prisa.
-Porque entre estos senderos, cada tumba guarda una historia.
-Algunas hablan de héroes…Otras de personajes ilustres.
-Y algunas... de momentos que difícilmente aparecerían en un libro de historia..
-
-Frente a nosotros descansa Andrés Bello…Jurista, filósofo, educador y uno de los intelectuales más importantes de América Latina.
-Un hombre que dedicó gran parte de su vida al estudio del lenguaje y a comprender las palabras, a definirlas y a utilizarlas con precisión…
-
-(SONIDO: páginas antiguas pasando lentamente.)
-
-Pero existe una anécdota que ha sobrevivido al paso del tiempo.
-Una historia curiosa… Algo vergonzosa, y dependiendo de quién la cuente, también bastante divertida…
-
-(SONIDO: transición suave. El ambiente del cementerio se desvanece lentamente. Aparecen sonidos del interior de una casa antigua.)
-
-Se dice que una tarde, al regresar a casa la esposa de Andrés Bello notó algo extraño.
-Todo estaba demasiado silencioso, ni conversaciones, ni pasos, ni señales de Andrés.
-
-(SONIDO: pasos suaves sobre suelo de madera.)
-
-Extrañada, comenzó a recorrer la casa… pasillo tras pasillo, habitación tras habitación.
-—¿Andrés? —preguntó.
-Pero nadie respondió.
-
-(Silencio)
-
-Hasta que llegó frente a una puerta cerrada.
-
-(SONIDO: puerta de madera rechinando lentamente.)
-
-La abrió… Y entonces… lo encontró.
-Andrés Bello estaba allí…Acompañado por la sirvienta.
-
-Narradora Ahora bien...Por respeto a nuestro recorrido familiar...y para evitar explicaciones incómodas más adelante...digamos simplemente que ambos parecían estar... muy concentrados en una actividad que no estaba relacionada con la gramática…
-
-(Silencio.)
-
-La esposa quedó inmóvil, observando la escena, sin saber muy bien qué decir, hasta que finalmente logró pronunciar unas pocas palabras.
-
-MUJER (voz sorprendida y dolida):
-"Estoy impresionada..."
-
-Andrés Bello levantó lentamente la vista, La observó durante unos segundos y con una calma que probablemente no ayudó en absoluto a la situación, respondió:
-
-VOZ DE ANDRÉS BELLO (grave, serena):
-"No, Tú no estás impresionada,Tú estás putrefacta… El impresionado soy yo."
-
-(Silencio breve.)
-
-(SONIDO: viento suave reapareciendo.)
-
-NARRADORA (tono reflexivo y ligeramente divertido):
-Verdadera o no, la anécdota ha perdurado durante generaciones, porque retrata algo que muchos asociaban con Andrés Bello y su obsesión por las palabras.
-Incluso en uno de los momentos más incómodos de su vida… parecía incapaz de dejar pasar una definición incorrecta.
-
-(SONIDO: pasos retomándose sobre grava.)
-
-NARRADORA (voz cercana):
-Y mientras continúas este recorrido… quizás valga la pena preguntarse:
-¿Qué tiene más poder?... ¿Lo que sentimos? ¿O las palabras que usamos para describirlo?
-
-(Pausa.)
-
-Tal vez Andrés Bello habría tenido una respuesta Aunque, considerando las circunstancias...quizás era mejor no preguntarle.
-
-(SONIDO FINAL: pasos alejándose lentamente mientras el viento se desvanece.)`
-      },
-      {
-        num: "Hito 11",
-        titulo: "“La mujer que murió dos veces”",
-        ubicacion: "Mausoleo de Mariano Egaña y Rosario Zuazagoitía (Patio 7)",
-        duracion: "4:00",
-        audio: "audios/hito-11.mp3",
-        texto: `Voz narradora: Adulta femenina con un tono misterioso
-
-(Sonido ambiente: viento suave entre los árboles y una campana resuena a lo lejos)
-
-Quiero que imaginen algo por un momento. Imaginen abrir una tumba que ha permanecido cerrada durante años. Imaginen el silencio, la expectación de quienes observan y, de pronto, descubrir algo que no debería estar ahí. Algo que desafía toda explicación.
-
-Porque algunas historias nacen de grandes héroes y otras de importantes acontecimientos históricos. Pero hay historias que sobreviven simplemente porque nadie ha sido capaz de responder una pregunta.
-
-(Se escuchan plumas escribiendo, conversaciones en voz baja y el sonido de un reloj antiguo.)
-
-La historia de Rosario es una de ellas. Todo comenzó en el Santiago del siglo XIX, cuando la medicina aún tenía muchas limitaciones y declarar la muerte de una persona no siempre era tan sencillo como parece hoy.
-
-(Tos débil, respiración agitada, agua sirviéndose en un vaso y susurros familiares.)
-
-Rosario enfermó repentinamente y su estado empeoró con rapidez. Tras ser declarada fallecida, su familia comenzó a prepararla para el último adiós. Entre quienes la acompañaban estaba su hermana Carmen, quien, siguiendo la costumbre de la época, ató sus manos con un pañuelo en forma de cruz.
-
-(Llantos suaves, el roce de una tela y campanas de iglesia a la distancia.)
-
-Aquel gesto parecía ser una despedida más, pero con el paso de los años terminaría convirtiéndose en la clave de una de las leyendas más conocidas del Cementerio General.
-
-(El sonido de un reloj marcando el paso del tiempo. El viento mueve las hojas.)
-
-Los años pasaron y Carmen terminó casándose con Mariano Egaña, el viudo de Rosario y cuenta la leyenda que tiempo después, cuando Carmen falleció, la familia decidió reunir nuevamente a las dos hermanas en la misma sepultura.
-
-(Golpes de herramientas sobre piedra, una puerta de hierro abriéndose, madera crujiendo y murmullos de sorpresa.)
-
-Fue entonces cuando, según cuenta la leyenda, ocurrió algo inesperado. Al abrir la tumba, el cuerpo de Rosario ya no se encontraba exactamente como había sido dejado y el pañuelo que sujetaba sus manos aparecía desatado.
-
-(Silencio profundo. Sólo se escucha el viento recorriendo los árboles.)
-
-Algunos relatos incluso afirman que existían señales que parecían indicar movimiento dentro del ataúd. Desde ese momento comenzó a surgir una pregunta que todavía hoy sigue recorriendo los pasillos del Cementerio General.
-
-¿Y si Rosario nunca estuvo realmente muerta?
-
-¿Y si despertó cuando ya era demasiado tarde?
-
-(Pausa breve. Hojas secas arrastradas por el viento y una campana de iglesia a la distancia.)
-
-Nadie pudo comprobarlo y nadie pudo explicarlo. Quizás por eso esta historia continúa viva. Porque, más allá de si fue realidad o leyenda, Rosario representa uno de los mayores temores de la sociedad del siglo XIX: ser olvidado, ser sepultado antes de tiempo y enfrentarse a preguntas que nunca encuentran respuesta.
-
-(El viento vuelve a sentirse entre los árboles. Se escuchan nuevamente los pasos del grupo sobre la gravilla.)
-
-Por eso, mientras nos encontramos aquí, frente a este lugar cargado de historia, los invito a preguntarse qué creen ustedes.
-
-Porque después de más de un siglo, el misterio de Rosario sigue esperando una respuesta.
-
-(Los pasos continúan alejándose lentamente mientras el viento entre los cipreses vuelve a ser el único sonido.)`
-      }
+    const hitos = [
+      ["Hito 01", "El principio", "Tumba de Manuel Joaquín Valdivieso", "audios/hito-1.mp3", "Aquí pega el texto del Hito 1"],
+      ["Hito 02", "“Un sabor… curioso…”", "Intersección calle Echaurren con Infante", "audios/hito-2.mp3", "Aquí pega el texto del Hito 2"],
+      ["Hito 03", "Bernardo O’Higgins, el hombre que nunca dejó de regresar", "Sector Bernardo O’Higgins", "audios/hito-3.mp3", "Aquí pega el texto del Hito 3"],
+      ["Hito 04", "“La Mulan”", "Mausoleo Cuerpo de Inválidos - Veteranos del 79", "audios/hito-4.mp3", "Aquí pega el texto del Hito 4"],
+      ["Hito 05", "“Entre símbolos y esculturas”", "Mausoleo Gótico Garin", "audios/hito-5.mp3", "Aquí pega el texto del Hito 5"],
+      ["Hito 06", "“La mujer del velo negro”", "Calle Romero con calle Dávila", "audios/hito-6.mp3", "Aquí pega el texto del Hito 6"],
+      ["Hito 07", "“Una flor para otra flor”", "Calle Romero con Dávila", "audios/hito-7.mp3", "Aquí pega el texto del Hito 7"],
+      ["Hito 08", "“La bruja del gato negro”", "Pabellón 1", "audios/hito-8.mp3", "Aquí pega el texto del Hito 8"],
+      ["Hito 09", "“Si lo Sigues, No Regresas.”", "Calle Cipreses con Ariarán", "audios/hito-9.mp3", "Aquí pega el texto del Hito 9"],
+      ["Hito 10", "“El lenguaje… no se detiene.”", "Tumba de Andrés Bello", "audios/hito-10.mp3", "Aquí pega el texto del Hito 10"],
+      ["Hito 11", "“La mujer que murió dos veces”", "Mausoleo Mariano Egaña y Rosario Zuazagoitía", "audios/hito-11.mp3", "Aquí pega el texto del Hito 11"]
     ];
 
-    const grid = document.getElementById('hitosGrid');
-    hitosData.forEach(h => {
-      const card = document.createElement('article');
-      card.className = 'hito-card';
-      card.innerHTML = `
-        <span class="hito-number">${h.num}</span>
-        <h3>${h.titulo}</h3>
-        <div class="hito-meta">
-          <span>📍 ${h.ubicacion}</span>
-          <span>⏱ Duración: ${h.duracion} min</span>
-        </div>
-        <div class="custom-player">
-          <audio preload="none" src="${h.audio}"></audio>
-          <button class="play-btn" aria-label="Reproducir o pausar">▶</button>
-          <div class="progress-wrap">
-            <input type="range" class="progress-bar" value="0" min="0" max="100">
-            <div class="time-display"><span class="current">0:00</span><span class="duration">${h.duracion}</span></div>
-          </div>
-        </div>
-        <button class="transcript-toggle"><span>Leer transcripción</span><span>▾</span></button>
-        <div class="transcript-content">${h.texto}</div>
-      `;
-      grid.appendChild(card);
+    const grid = document.getElementById('grid');
+    hitos.forEach(h => {
+      grid.innerHTML += `
+        <div class="card">
+          <small>${h[0]}</small>
+          <h3>${h[1]}</h3>
+          <div class="meta">📍 ${h[2]}</div>
+          <audio controls src="${h[3]}"></audio>
+          <button class="toggle" onclick="this.nextElementSibling.classList.toggle('open')">Leer transcripción ▾</button>
+          <div class="text-box">${h[4]}</div>
+        </div>`;
     });
 
-    const players = document.querySelectorAll('.custom-player');
-    function formatTime(sec) {
-      if (isNaN(sec)) return '0:00';
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    function selectFace(btn) {
+      document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+      btn.classList.add('active');
     }
-
-    players.forEach(player => {
-      const audio = player.querySelector('audio');
-      const playBtn = player.querySelector('.play-btn');
-      const progressBar = player.querySelector('.progress-bar');
-      const currentSpan = player.querySelector('.current');
-      const durationSpan = player.querySelector('.duration');
-
-      audio.addEventListener('loadedmetadata', () => {
-        durationSpan.textContent = formatTime(audio.duration);
-      });
-
-      playBtn.addEventListener('click', () => {
-        players.forEach(other => {
-          const otherAudio = other.querySelector('audio');
-          const otherBtn = other.querySelector('.play-btn');
-          if (otherAudio !== audio && !otherAudio.paused) {
-            otherAudio.pause();
-            otherBtn.textContent = '▶';
-          }
-        });
-        if (audio.paused) {
-          audio.play().catch(() => {
-            alert('Aún no has subido el archivo MP3 correspondiente a este hito (' + audio.getAttribute('src') + ').');
-          });
-          playBtn.textContent = '❚❚';
-        } else {
-          audio.pause();
-          playBtn.textContent = '▶';
-        }
-      });
-
-      audio.addEventListener('timeupdate', () => {
-        if (audio.duration) {
-          progressBar.value = (audio.currentTime / audio.duration) * 100;
-          currentSpan.textContent = formatTime(audio.currentTime);
-        }
-      });
-
-      progressBar.addEventListener('input', () => {
-        if (audio.duration) audio.currentTime = (progressBar.value / 100) * audio.duration;
-      });
-
-      audio.addEventListener('ended', () => {
-        playBtn.textContent = '▶';
-        progressBar.value = 0;
-        currentSpan.textContent = '0:00';
-      });
-    });
-
-    document.querySelectorAll('.transcript-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const content = btn.nextElementSibling;
-        const arrow = btn.querySelector('span:last-child');
-        const label = btn.querySelector('span:first-child');
-        const isOpen = content.classList.toggle('open');
-        arrow.textContent = isOpen ? '▴' : '▾';
-        label.textContent = isOpen ? 'Ocultar transcripción' : 'Leer transcripción';
-      });
-    });
-
-    const mapModal = document.getElementById('mapModal');
-    const modalImg = document.getElementById('modalMapImg');
-    let currentZoom = 1;
-
-    function openModal() {
-      mapModal.classList.add('active');
-      currentZoom = 1;
-      modalImg.style.transform = `scale(${currentZoom})`;
+    function sendSurvey() {
+      if (!document.querySelector('.face.active')) return alert('Selecciona una carita primero.');
+      document.getElementById('thanks').style.display = 'block';
+      document.getElementById('comment').value = '';
     }
-
-    document.getElementById('openMapModal').addEventListener('click', openModal);
-    document.getElementById('btnOpenZoom').addEventListener('click', openModal);
-    document.getElementById('closeMapModal').addEventListener('click', () => mapModal.classList.remove('active'));
-    document.getElementById('zoomInBtn').addEventListener('click', () => {
-      currentZoom = Math.min(currentZoom + 0.4, 3);
-      modalImg.style.transform = `scale(${currentZoom})`;
-    });
-    document.getElementById('zoomOutBtn').addEventListener('click', () => {
-      currentZoom = Math.max(currentZoom - 0.4, 1);
-      modalImg.style.transform = `scale(${currentZoom})`;
-    });
-
-    const faces = document.querySelectorAll('.face-btn');
-    let selectedRating = 0;
-    faces.forEach(face => {
-      face.addEventListener('click', () => {
-        selectedRating = Number(face.dataset.value);
-        faces.forEach(f => f.classList.remove('active'));
-        face.classList.add('active');
-      });
-    });
-
-    document.getElementById('surveyForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (selectedRating === 0) {
-        alert('Por favor selecciona una carita para calificar tu experiencia antes de enviar.');
-        return;
-      }
-      document.getElementById('surveyForm').style.display = 'none';
-      document.getElementById('surveyFeedback').style.display = 'block';
-    });
   </script>
 </body>
 </html>
-
-
