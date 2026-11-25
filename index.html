@@ -137,26 +137,44 @@
       btn.classList.add('active');
       calificacion = valor;
     }
-        function sendSurvey() {
+           function sendSurvey() {
       if (!calificacion) return alert('Selecciona una carita primero.');
       const comentario = document.getElementById('comment').value || 'Sin comentario';
 
-      const formData = new URLSearchParams();
-      formData.append('entry.1330167342', calificacion);
-      formData.append('entry.177037349', comentario);
+      let iframe = document.getElementById('hidden_iframe');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = 'hidden_iframe';
+        iframe.id = 'hidden_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
 
-      const url = 'https://google.com' + '/forms/d/e/' + '1FAIpQLSfJQJtrIEzxbE3YPVBH0F5rdTimb_XnTjguzckrYwzx0YqfSw' + '/formResponse';
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.target = 'hidden_iframe';
+      form.action = 'https://google.com' + '/forms/d/e/' + '1FAIpQLSfJQJtrIEzxbE3YPVBH0F5rdTimb_XnTjguzckrYwzx0YqfSw' + '/formResponse';
 
-      fetch(url, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-      }).then(() => {
-        document.getElementById('thanks').style.display = 'block';
-        document.getElementById('comment').value = '';
-        document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
-        calificacion = "";
-      });
+      const input1 = document.createElement('input');
+      input1.type = 'hidden';
+      input1.name = 'entry.1330167342';
+      input1.value = calificacion;
+      form.appendChild(input1);
+
+      const input2 = document.createElement('input');
+      input2.type = 'hidden';
+      input2.name = 'entry.177037349';
+      input2.value = comentario;
+      form.appendChild(input2);
+
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+
+      document.getElementById('thanks').style.display = 'block';
+      document.getElementById('comment').value = '';
+      document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+      calificacion = "";
     }
   </script>
 </body>
