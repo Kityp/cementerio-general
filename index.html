@@ -89,58 +89,78 @@
     <img src="mapa-cementerio.jpg" alt="Mapa ampliado">
   </div>
 
-  <section id="encuesta" class="container">
+   <section id="encuesta" class="container">
     <div class="survey">
       <h2>¿Cómo fue tu experiencia?</h2>
       <div class="faces">
-        <button type="button" class="face" onclick="selectFace(this)">😠</button>
-        <button type="button" class="face" onclick="selectFace(this)">😢</button>
-        <button type="button" class="face" onclick="selectFace(this)">😐</button>
-        <button type="button" class="face" onclick="selectFace(this)">🙂</button>
-        <button type="button" class="face" onclick="selectFace(this)">😁</button>
+        <button type="button" class="face" onclick="selectFace(this, '😠 Muy mala')">😠</button>
+        <button type="button" class="face" onclick="selectFace(this, '😢 Mala')">😢</button>
+        <button type="button" class="face" onclick="selectFace(this, '😐 Regular')">😐</button>
+        <button type="button" class="face" onclick="selectFace(this, '🙂 Buena')">🙂</button>
+        <button type="button" class="face" onclick="selectFace(this, '😁 Excelente')">😁</button>
       </div>
       <textarea id="comment" placeholder="Deja aquí tu comentario sobre el recorrido..."></textarea>
-      <button class="submit-btn" onclick="sendSurvey()">Enviar valoración</button>
+      <button type="button" class="submit-btn" onclick="sendSurvey()">Enviar valoración</button>
       <p id="thanks" style="display:none; margin-top:1rem; color:#d1d5db;">¡Gracias por compartir tu experiencia!</p>
     </div>
-  </section>
+  </section> 
 
   <script>
     const hitos = [
-      ["Hito 01", "El principio", "Tumba de Manuel Joaquín Valdivieso", "audios/hito-1.mp3", "Aquí pega el texto del Hito 1"],
-      ["Hito 02", "“Un sabor… curioso…”", "Intersección calle Echaurren con Infante", "audios/hito-2.mp3", "Aquí pega el texto del Hito 2"],
-      ["Hito 03", "Bernardo O’Higgins, el hombre que nunca dejó de regresar", "Sector Bernardo O’Higgins", "audios/hito-3.mp3", "Aquí pega el texto del Hito 3"],
-      ["Hito 04", "“La Mulan”", "Mausoleo Cuerpo de Inválidos - Veteranos del 79", "audios/hito-4.mp3", "Aquí pega el texto del Hito 4"],
-      ["Hito 05", "“Entre símbolos y esculturas”", "Mausoleo Gótico Garin", "audios/hito-5.mp3", "Aquí pega el texto del Hito 5"],
-      ["Hito 06", "“La mujer del velo negro”", "Calle Romero con calle Dávila", "audios/hito-6.mp3", "Aquí pega el texto del Hito 6"],
-      ["Hito 07", "“Una flor para otra flor”", "Calle Romero con Dávila", "audios/hito-7.mp3", "Aquí pega el texto del Hito 7"],
-      ["Hito 08", "“La bruja del gato negro”", "Pabellón 1", "audios/hito-8.mp3", "Aquí pega el texto del Hito 8"],
-      ["Hito 09", "“Si lo Sigues, No Regresas.”", "Calle Cipreses con Ariarán", "audios/hito-9.mp3", "Aquí pega el texto del Hito 9"],
-      ["Hito 10", "“El lenguaje… no se detiene.”", "Tumba de Andrés Bello", "audios/hito-10.mp3", "Aquí pega el texto del Hito 10"],
-      ["Hito 11", "“La mujer que murió dos veces”", "Mausoleo Mariano Egaña y Rosario Zuazagoitía", "audios/hito-11.mp3", "Aquí pega el texto del Hito 11"]
+      ["Hito 01", "El principio", "Tumba de Manuel Joaquín Valdivieso", "audios/hito-1.mp3"],
+      ["Hito 02", "“Un sabor… curioso…”", "Intersección calle Echaurren con Infante", "audios/hito-2.mp3"],
+      ["Hito 03", "Bernardo O’Higgins, el hombre que nunca dejó de regresar", "Sector Bernardo O’Higgins", "audios/hito-3.mp3"],
+      ["Hito 04", "“La Mulan”", "Mausoleo Cuerpo de Inválidos - Veteranos del 79", "audios/hito-4.mp3"],
+      ["Hito 05", "“Entre símbolos y esculturas”", "Mausoleo Gótico Garin", "audios/hito-5.mp3"],
+      ["Hito 06", "“La mujer del velo negro”", "Calle Romero con calle Dávila", "audios/hito-6.mp3"],
+      ["Hito 07", "“Una flor para otra flor”", "Calle Romero con Dávila", "audios/hito-7.mp3"],
+      ["Hito 08", "“La bruja del gato negro”", "Pabellón 1", "audios/hito-8.mp3"],
+      ["Hito 09", "“Si lo Sigues, No Regresas.”", "Calle Cipreses con Ariarán", "audios/hito-9.mp3"],
+      ["Hito 10", "“El lenguaje… no se detiene.”", "Tumba de Andrés Bello", "audios/hito-10.mp3"],
+      ["Hito 11", "“La mujer que murió dos veces”", "Mausoleo Mariano Egaña y Rosario Zuazagoitía", "audios/hito-11.mp3"]
     ];
 
     const grid = document.getElementById('grid');
     hitos.forEach(h => {
       grid.innerHTML += `
         <div class="card">
-          <small>${h[0]}</small>
-          <h3>${h[1]}</h3>
-          <div class="meta">📍 ${h[2]}</div>
-          <audio controls src="${h[3]}"></audio>
-         
+          <small>${h}</small>
+          <h3>${h}</h3>
+          <div class="meta">📍 ${h}</div>
+          <audio controls src="${h}"></audio>
         </div>`;
     });
 
-    function selectFace(btn) {
+    let calificacion = "";
+
+    function selectFace(btn, valor) {
       document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
       btn.classList.add('active');
+      calificacion = valor;
     }
+
     function sendSurvey() {
-      if (!document.querySelector('.face.active')) return alert('Selecciona una carita primero.');
-      document.getElementById('thanks').style.display = 'block';
-      document.getElementById('comment').value = '';
+      if (!calificacion) return alert('Selecciona una carita primero.');
+      const comentario = document.getElementById('comment').value || 'Sin comentario';
+
+      const formData = new URLSearchParams();
+      formData.append('entry.1336668087', calificacion);
+      formData.append('entry.89445586', comentario);
+
+      fetch('https://google.com', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      }).then(() => {
+        document.getElementById('thanks').style.display = 'block';
+        document.getElementById('comment').value = '';
+        document.querySelectorAll('.face').forEach(f => f.classList.remove('active'));
+        calificacion = "";
+      });
     }
   </script>
+</body>
+</html>
+
 </body>
 </html>
