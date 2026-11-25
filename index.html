@@ -119,15 +119,14 @@
       ["Hito 10", "“El lenguaje… no se detiene.”", "Tumba de Andrés Bello", "audios/hito-10.mp3"],
       ["Hito 11", "“La mujer que murió dos veces”", "Mausoleo Mariano Egaña y Rosario Zuazagoitía", "audios/hito-11.mp3"]
     ];
-
     const grid = document.getElementById('grid');
     hitos.forEach(h => {
       grid.innerHTML += `
         <div class="card">
-          <small>${h}</small>
-          <h3>${h}</h3>
-          <div class="meta">📍 ${h}</div>
-          <audio controls src="${h}"></audio>
+          <small>${h.at(0)}</small>
+          <h3>${h.at(1)}</h3>
+          <div class="meta">📍 ${h.at(2)}</div>
+          <audio controls src="${h.at(3)}"></audio>
         </div>`;
     });
 
