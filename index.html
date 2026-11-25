@@ -137,14 +137,13 @@
       btn.classList.add('active');
       calificacion = valor;
     }
-
     function sendSurvey() {
       if (!calificacion) return alert('Selecciona una carita primero.');
       const comentario = document.getElementById('comment').value || 'Sin comentario';
 
       const formData = new URLSearchParams();
-      formData.append('entry.1336668087', calificacion);
-      formData.append('entry.89445586', comentario);
+      formData.append('entry.1330167342', calificacion);
+      formData.append('entry.177037349', comentario);
 
       fetch('https://google.com', {
         method: 'POST',
@@ -161,5 +160,4 @@
 </body>
 </html>
 
-</body>
-</html>
+    
