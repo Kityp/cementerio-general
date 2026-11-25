@@ -137,7 +137,7 @@
       btn.classList.add('active');
       calificacion = valor;
     }
-    function sendSurvey() {
+        function sendSurvey() {
       if (!calificacion) return alert('Selecciona una carita primero.');
       const comentario = document.getElementById('comment').value || 'Sin comentario';
 
@@ -145,7 +145,9 @@
       formData.append('entry.1330167342', calificacion);
       formData.append('entry.177037349', comentario);
 
-      fetch('https://google.com', {
+      const url = 'https://google.com' + '/forms/d/e/' + '1FAIpQLSfJQJtrIEzxbE3YPVBH0F5rdTimb_XnTjguzckrYwzx0YqfSw' + '/formResponse';
+
+      fetch(url, {
         method: 'POST',
         mode: 'no-cors',
         body: formData
@@ -159,5 +161,3 @@
   </script>
 </body>
 </html>
-
-    
